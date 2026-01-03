@@ -8,7 +8,7 @@
 
 ## Overview
 
-A simple browser extension that copies a URL and removes query parameters based on a list of exclusions.
+A simple browser extension that copies a URL with unwanted query parameters
 
 ## Resources
 
