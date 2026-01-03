@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/TylerHillery/url-clipr/compare/v1.0.1...v1.0.2) (2026-01-03)
+
+
+### Bug Fixes
+
+* release does not contain zip ([b2942f4](https://github.com/TylerHillery/url-clipr/commit/b2942f4ff57bcc2a0a2f6cb0ea1c85303a47ff3e))
+
 ## [1.0.1](https://github.com/TylerHillery/url-clipr/compare/v1.0.0...v1.0.1) (2026-01-03)
 
 
