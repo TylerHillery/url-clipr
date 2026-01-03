@@ -3,6 +3,7 @@ export default {
   plugins: [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
+    ["@semantic-release/npm", { npmPublish: false }],
     ["@semantic-release/changelog", { changelogFile: "CHANGELOG.md" }],
     [
       "@semantic-release/git",
@@ -12,14 +13,10 @@ export default {
           "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}",
       },
     ],
-    "@semantic-release/github",
-    {
-      assets: [{ path: ".output/*-chrome.zip", label: "Chrome Extension" }],
-    },
     [
-      "@semantic-release/npm",
+      "@semantic-release/github",
       {
-        npmPublish: false,
+        assets: [{ path: ".output/*-chrome.zip", label: "Chrome Extension" }],
       },
     ],
   ],
