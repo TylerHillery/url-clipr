@@ -1,13 +1,7 @@
 import "./style.css";
 import { browser, storage } from "#imports";
-import { urlClipr } from "@/utils/clipr";
+import { ExclusionPattern, loadPatterns, STORAGE_KEY, urlClipr } from "@/utils/clipr";
 
-const STORAGE_KEY = "local:exclusionPatterns";
-
-interface ExclusionPattern {
-  id: string;
-  pattern: string;
-}
 
 const patternInput = getElement("patternInput", HTMLInputElement);
 const addBtn = getElement("addBtn", HTMLButtonElement);
@@ -16,11 +10,6 @@ const emptyState = getElement("emptyState", HTMLParagraphElement);
 const copyUrlBtn = getElement("copyUrlBtn", HTMLButtonElement);
 const copyUrlIcon = getElement("copyUrlIcon", HTMLSpanElement);
 const copyUrlText = getElement("copyUrlText", HTMLSpanElement);
-
-export async function loadPatterns(): Promise<ExclusionPattern[]> {
-  const patterns = await storage.getItem<ExclusionPattern[]>(STORAGE_KEY);
-  return patterns || [];
-}
 
 async function savePatterns(patterns: ExclusionPattern[]): Promise<void> {
   await storage.setItem(STORAGE_KEY, patterns);

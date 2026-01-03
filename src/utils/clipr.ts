@@ -1,3 +1,16 @@
+import { storage } from "#imports";
+
+export const STORAGE_KEY = "local:exclusionPatterns";
+export interface ExclusionPattern {
+  id: string;
+  pattern: string;
+}
+
+export async function loadPatterns(): Promise<ExclusionPattern[]> {
+  const patterns = await storage.getItem<ExclusionPattern[]>(STORAGE_KEY);
+  return patterns || [];
+}
+
 export function urlClipr(urlStr: string, patterns: string[]): string {
   const url = new URL(urlStr);
 
@@ -12,5 +25,3 @@ export function urlClipr(urlStr: string, patterns: string[]): string {
     params.length ? "?" + params.join("&") : ""
   }${url.hash}`;
 }
-
-urlClipr("https://example.com", ["utm", "fbclid"]);

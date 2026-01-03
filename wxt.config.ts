@@ -6,6 +6,16 @@ export default defineConfig({
   imports: false,
   manifest: {
     name: "URL Clipr",
-    permissions: ["storage", "activeTab", "contextMenus", "clipboardRead", "clipboardWrite"],
+    permissions: ["storage", "activeTab", "contextMenus", "scripting"],
+    commands: {
+      "copy-url": {
+        suggested_key: {
+          default: "Ctrl+Shift+U",
+          mac: "Command+Shift+U",
+        },
+        description:
+          "Copies currently active tab url remove any unwanted query params",
+      },
+    },
   },
 });
