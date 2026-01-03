@@ -1,0 +1,22 @@
+{
+  "name": "url-clipr",
+  "description": "Copy URLs but clip off query params you don't need",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:chrome": "wxt -b chrome",
+    "build": "wxt build",
+    "build:chrome": "wxt build -b chrome",
+    "zip": "wxt zip",
+    "zip:chrome": "wxt zip -b chrome",
+    "compile": "tsc --noEmit",
+    "postinstall": "wxt prepare",
+    "test": "vitest --run"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16",
+    "wxt": "^0.20.6"
+  }
+}
