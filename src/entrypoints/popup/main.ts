@@ -1,24 +1,118 @@
 import "./style.css";
-import typescriptLogo from "@/assets/typescript.svg";
-import wxtLogo from "/wxt.svg";
-import { setupCounter } from "@/components/counter";
+import { storage } from "#imports";
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
-  <div>
-    <a href="https://wxt.dev" target="_blank">
-      <img src="${wxtLogo}" class="logo" alt="WXT logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>WXT + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the WXT and TypeScript logos to learn more
-    </p>
-  </div>
-`;
+const STORAGE_KEY = "local:exclusionPatterns";
 
-setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);
+interface ExclusionPattern {
+  id: string;
+  pattern: string;
+}
+
+const patternInput = getElement("patternInput", HTMLInputElement);
+const addBtn = getElement("addBtn", HTMLButtonElement);
+const patternsList = getElement("patternsList", HTMLUListElement);
+const emptyState = getElement("emptyState", HTMLParagraphElement);
+
+async function loadPatterns(): Promise<ExclusionPattern[]> {
+  const patterns = await storage.getItem<ExclusionPattern[]>(STORAGE_KEY);
+  return patterns || [];
+}
+
+async function savePatterns(patterns: ExclusionPattern[]): Promise<void> {
+  await storage.setItem(STORAGE_KEY, patterns);
+}
+
+async function renderPatterns(): Promise<void> {
+  const patterns = await loadPatterns();
+
+  if (patterns.length === 0) {
+    patternsList.style.display = "none";
+    emptyState.style.display = "block";
+  } else {
+    patternsList.style.display = "block";
+    emptyState.style.display = "none";
+
+    patternsList.innerHTML = patterns
+      .map(
+        (p) => `
+        <li class="pattern-item">
+          <span class="pattern-text">${escapeHtml(p.pattern)}</span>
+          <button class="delete-btn" data-id="${p.id}">x</button>
+        </li>
+      `
+      )
+      .join("");
+
+    document.querySelectorAll(".delete-btn").forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        const id = (e.target as HTMLButtonElement).dataset.id!;
+        await deletePattern(id);
+      });
+    });
+  }
+}
+
+async function addPattern(pattern: string): Promise<void> {
+  const trimmed = pattern.trim();
+  if (!trimmed) return;
+
+  const patterns = await loadPatterns();
+
+  if (patterns.some((p) => p.pattern === trimmed)) {
+    alert("This pattern already exists!");
+    return;
+  }
+
+  const newPattern: ExclusionPattern = {
+    id: crypto.randomUUID(),
+    pattern: trimmed,
+  };
+
+  patterns.push(newPattern);
+  await savePatterns(patterns);
+  await renderPatterns();
+
+  patternInput.value = "";
+  patternInput.focus();
+}
+
+// Delete a pattern
+async function deletePattern(id: string): Promise<void> {
+  const patterns = await loadPatterns();
+  const filtered = patterns.filter((p) => p.id !== id);
+  await savePatterns(filtered);
+  await renderPatterns();
+}
+
+function escapeHtml(text: string): string {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+addBtn.addEventListener("click", () => {
+  addPattern(patternInput.value);
+});
+
+patternInput.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    addPattern(patternInput.value);
+  }
+});
+
+storage.watch<ExclusionPattern[]>(STORAGE_KEY, async () => {
+  await renderPatterns();
+});
+
+renderPatterns();
+
+function getElement<T extends HTMLElement>(
+  id: string,
+  type: { new (): T }
+): T {
+  const el = document.getElementById(id);
+  if (!el || !(el instanceof type)) {
+    throw new Error(`Element #${id} not found or wrong type`);
+  }
+  return el;
+}
