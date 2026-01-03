@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/TylerHillery/url-clipr/compare/v1.0.0...v1.0.1) (2026-01-03)
+
+
+### Bug Fixes
+
+* extension description and version ([81312da](https://github.com/TylerHillery/url-clipr/commit/81312da1f9b689335c20e1b472a65d793a619411))
+
 # 1.0.0 (2026-01-03)
 
 
