@@ -8,7 +8,7 @@
 
 ## Overview
 
-A simple browser extension that copies a URL without unwanted query parameters
+A simple browser extension that copies URLs without unwanted query parameters
 
 ## Resources
 

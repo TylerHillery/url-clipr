@@ -16,5 +16,11 @@ export default {
     {
       assets: [{ path: ".output/*-chrome.zip", label: "Chrome Extension" }],
     },
+    [
+      "@semantic-release/npm",
+      {
+        npmPublish: false,
+      },
+    ],
   ],
 };

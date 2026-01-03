@@ -1,6 +1,6 @@
 {
   "name": "url-clipr",
-  "description": "Copy URLs but clip off query params you don't need",
+  "description": "Copy URLs without unwanted query params",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
