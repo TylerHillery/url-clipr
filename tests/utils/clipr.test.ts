@@ -1,5 +1,6 @@
-import { describe, test, expect } from "vitest";
-import { urlClipr} from "@/utils/clipr";
+import { describe, expect, test } from "vitest";
+
+import { urlClipr } from "@/utils/clipr";
 
 describe.each([
   {

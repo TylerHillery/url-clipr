@@ -1,0 +1,6 @@
+[tools]
+pnpm = "latest"
+pre-commit = "latest"
+
+[tasks.precommit]
+run = "pre-commit run --all-files"

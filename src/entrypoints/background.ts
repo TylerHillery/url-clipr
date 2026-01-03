@@ -1,6 +1,6 @@
+import { loadPatterns, urlClipr } from "@/utils/clipr";
 import { browser } from "#imports";
 import { defineBackground } from "#imports";
-import { loadPatterns, urlClipr } from "@/utils/clipr";
 
 export default defineBackground(() => {
   browser.runtime.onInstalled.addListener(async () => {
@@ -43,14 +43,13 @@ export default defineBackground(() => {
 
     await clipAndCopy(tab.url, tab.id);
   });
-
 });
 
 async function clipAndCopy(url: string, tabId: number): Promise<void> {
   const patterns = await loadPatterns();
   const cleanedURL = urlClipr(
     url,
-    patterns.map((p) => p.pattern)
+    patterns.map((p) => p.pattern),
   );
 
   try {

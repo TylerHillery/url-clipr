@@ -1,11 +1,12 @@
 import "./style.css";
-import { browser, storage } from "#imports";
+
 import {
   ExclusionPattern,
   loadPatterns,
   STORAGE_KEY,
   urlClipr,
 } from "@/utils/clipr";
+import { browser, storage } from "#imports";
 
 const patternInput = getElement("patternInput", HTMLInputElement);
 const addBtn = getElement("addBtn", HTMLButtonElement);
@@ -36,7 +37,7 @@ async function renderPatterns(): Promise<void> {
           <span class="pattern-text">${escapeHtml(p.pattern)}</span>
           <button class="delete-btn" data-id="${p.id}">x</button>
         </li>
-      `
+      `,
       )
       .join("");
   }
@@ -112,7 +113,7 @@ copyUrlBtn.addEventListener("click", async () => {
     const patterns = await loadPatterns();
     const cleanedURL = urlClipr(
       tab.url,
-      patterns.map((p) => p.pattern)
+      patterns.map((p) => p.pattern),
     );
     await navigator.clipboard.writeText(cleanedURL);
 

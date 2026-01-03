@@ -1,0 +1,26 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-toml
+      - id: check-yaml
+      - id: trailing-whitespace
+  - repo: local
+    hooks:
+      - id: format
+        name: "format"
+        entry: sh -c 'pnpm run format'
+        language: system
+        pass_filenames: false
+
+      - id: backend-lint
+        name: "backend: lint"
+        entry: sh -c 'pnpm run lint'
+        language: system
+        pass_filenames: false
+
+      - id: compile
+        name: "compile"
+        entry: sh -c 'pnpm compile'
+        language: system
+        pass_filenames: false

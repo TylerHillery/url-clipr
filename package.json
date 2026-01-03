@@ -5,17 +5,24 @@
   "type": "module",
   "scripts": {
     "dev": "wxt",
-    "dev:chrome": "wxt -b chrome",
-    "build": "wxt build",
-    "build:chrome": "wxt build -b chrome",
-    "zip": "wxt zip",
-    "zip:chrome": "wxt zip -b chrome",
+    "format": "prettier --write .",
+    "lint": "eslint . --fix",
     "compile": "tsc --noEmit",
-    "postinstall": "wxt prepare",
-    "test": "vitest --run"
+    "test": "vitest --run",
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "postinstall": "wxt prepare"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.3.0",
+    "globals": "^17.0.0",
+    "prettier": "^3.7.4",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.51.0",
     "vitest": "^4.0.16",
     "wxt": "^0.20.6"
   }
