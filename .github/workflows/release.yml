@@ -27,5 +27,8 @@ jobs:
           node-version: 24
           cache: "pnpm"
 
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Run semantic release
         run: pnpm release
