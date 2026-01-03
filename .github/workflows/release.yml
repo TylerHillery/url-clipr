@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Zip
+        run: pnpm zip
+
       - name: Release
         run: pnpm release
         env:

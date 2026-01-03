@@ -13,5 +13,8 @@ export default {
       },
     ],
     "@semantic-release/github",
+    {
+      assets: [{ path: ".output/*-chrome.zip", label: "Chrome Extension" }],
+    },
   ],
 };
