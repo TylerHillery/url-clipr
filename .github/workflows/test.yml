@@ -10,11 +10,6 @@ on:
       - synchronize
 
 jobs:
-  pre-commit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
   test:
     runs-on: ubuntu-latest
     steps:
