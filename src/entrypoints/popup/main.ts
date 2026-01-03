@@ -1,7 +1,11 @@
 import "./style.css";
 import { browser, storage } from "#imports";
-import { ExclusionPattern, loadPatterns, STORAGE_KEY, urlClipr } from "@/utils/clipr";
-
+import {
+  ExclusionPattern,
+  loadPatterns,
+  STORAGE_KEY,
+  urlClipr,
+} from "@/utils/clipr";
 
 const patternInput = getElement("patternInput", HTMLInputElement);
 const addBtn = getElement("addBtn", HTMLButtonElement);
@@ -35,13 +39,6 @@ async function renderPatterns(): Promise<void> {
       `
       )
       .join("");
-
-    document.querySelectorAll(".delete-btn").forEach((btn) => {
-      btn.addEventListener("click", async (e) => {
-        const id = (e.target as HTMLButtonElement).dataset.id!;
-        await deletePattern(id);
-      });
-    });
   }
 }
 
@@ -92,6 +89,15 @@ patternInput.addEventListener("keypress", (e) => {
   }
 });
 
+// Use event delegation for delete buttons
+patternsList.addEventListener("click", async (e) => {
+  const target = e.target as HTMLElement;
+  if (target.classList.contains("delete-btn")) {
+    const id = (target as HTMLButtonElement).dataset.id!;
+    await deletePattern(id);
+  }
+});
+
 copyUrlBtn.addEventListener("click", async () => {
   try {
     const [tab] = await browser.tabs.query({
@@ -104,7 +110,10 @@ copyUrlBtn.addEventListener("click", async () => {
     }
 
     const patterns = await loadPatterns();
-    const cleanedURL = urlClipr(tab.url, patterns.map((p) => p.pattern));
+    const cleanedURL = urlClipr(
+      tab.url,
+      patterns.map((p) => p.pattern)
+    );
     await navigator.clipboard.writeText(cleanedURL);
 
     const originalIcon = copyUrlIcon.innerHTML;

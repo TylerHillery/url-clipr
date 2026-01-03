@@ -13,8 +13,7 @@ export default defineConfig({
           default: "Ctrl+Shift+U",
           mac: "Command+Shift+U",
         },
-        description:
-          "Copies currently active tab url remove any unwanted query params",
+        description: "Copy active tab URL without unwanted query params",
       },
     },
   },
