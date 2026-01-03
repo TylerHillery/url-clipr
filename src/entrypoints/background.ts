@@ -1,5 +1,7 @@
 import { browser } from "#imports";
 import { defineBackground } from "#imports";
+import { urlClipr } from "@/utils/clipr";
+import { loadPatterns } from "./popup/main";
 
 export default defineBackground(() => {
   browser.runtime.onInstalled.addListener(async () => {
@@ -22,14 +24,19 @@ export default defineBackground(() => {
       return;
     }
 
+    const patterns = await loadPatterns();
+    const cleanedURL = urlClipr(
+      link.linkUrl,
+      patterns.map((p) => p.pattern)
+    );
+
     try {
-      // Execute clipboard copy in the page context
       await browser.scripting.executeScript({
         target: { tabId: tab.id },
         func: (url) => {
           navigator.clipboard.writeText(url);
         },
-        args: [link.linkUrl],
+        args: [cleanedURL],
       });
       console.log("Link copied to clipboard");
     } catch (err) {

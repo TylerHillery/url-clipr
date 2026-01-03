@@ -1,5 +1,6 @@
 import "./style.css";
-import { storage } from "#imports";
+import { browser, storage } from "#imports";
+import { urlClipr } from "@/utils/clipr";
 
 const STORAGE_KEY = "local:exclusionPatterns";
 
@@ -12,8 +13,11 @@ const patternInput = getElement("patternInput", HTMLInputElement);
 const addBtn = getElement("addBtn", HTMLButtonElement);
 const patternsList = getElement("patternsList", HTMLUListElement);
 const emptyState = getElement("emptyState", HTMLParagraphElement);
+const copyUrlBtn = getElement("copyUrlBtn", HTMLButtonElement);
+const copyUrlIcon = getElement("copyUrlIcon", HTMLSpanElement);
+const copyUrlText = getElement("copyUrlText", HTMLSpanElement);
 
-async function loadPatterns(): Promise<ExclusionPattern[]> {
+export async function loadPatterns(): Promise<ExclusionPattern[]> {
   const patterns = await storage.getItem<ExclusionPattern[]>(STORAGE_KEY);
   return patterns || [];
 }
@@ -76,7 +80,6 @@ async function addPattern(pattern: string): Promise<void> {
   patternInput.focus();
 }
 
-// Delete a pattern
 async function deletePattern(id: string): Promise<void> {
   const patterns = await loadPatterns();
   const filtered = patterns.filter((p) => p.id !== id);
@@ -100,16 +103,45 @@ patternInput.addEventListener("keypress", (e) => {
   }
 });
 
+copyUrlBtn.addEventListener("click", async () => {
+  try {
+    const [tab] = await browser.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+    if (!tab.url) {
+      alert("No URL found!");
+      return;
+    }
+
+    const patterns = await loadPatterns();
+    const cleanedURL = urlClipr(tab.url, patterns.map((p) => p.pattern));
+    await navigator.clipboard.writeText(cleanedURL);
+
+    const originalIcon = copyUrlIcon.innerHTML;
+    const originalText = copyUrlText.textContent;
+
+    copyUrlIcon.innerHTML =
+      '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+    copyUrlText.textContent = "Copied!";
+
+    setTimeout(() => {
+      copyUrlIcon.innerHTML = originalIcon;
+      copyUrlText.textContent = originalText;
+    }, 1000);
+  } catch (error) {
+    console.error("Failed to copy URL:", error);
+    alert("Failed to copy URL");
+  }
+});
+
 storage.watch<ExclusionPattern[]>(STORAGE_KEY, async () => {
   await renderPatterns();
 });
 
 renderPatterns();
 
-function getElement<T extends HTMLElement>(
-  id: string,
-  type: { new (): T }
-): T {
+function getElement<T extends HTMLElement>(id: string, type: { new (): T }): T {
   const el = document.getElementById(id);
   if (!el || !(el instanceof type)) {
     throw new Error(`Element #${id} not found or wrong type`);
