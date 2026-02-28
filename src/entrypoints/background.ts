@@ -41,11 +41,15 @@ export default defineBackground(() => {
       return;
     }
 
-    await clipAndCopy(tab.url, tab.id);
+    await clipAndCopy(tab.url, tab.id, { showToast: true });
   });
 });
 
-async function clipAndCopy(url: string, tabId: number): Promise<void> {
+async function clipAndCopy(
+  url: string,
+  tabId: number,
+  options?: { showToast?: boolean },
+): Promise<void> {
   const patterns = await loadPatterns();
   const cleanedURL = urlClipr(
     url,
@@ -55,10 +59,45 @@ async function clipAndCopy(url: string, tabId: number): Promise<void> {
   try {
     await browser.scripting.executeScript({
       target: { tabId },
-      func: (url) => {
-        navigator.clipboard.writeText(url);
+      func: async ({ url, showToast }: { url: string; showToast: boolean }) => {
+        await navigator.clipboard.writeText(url);
+
+        if (!showToast) {
+          return;
+        }
+
+        const existing = document.getElementById("url-clipr-toast");
+        existing?.remove();
+
+        const toast = document.createElement("div");
+        toast.id = "url-clipr-toast";
+        toast.textContent = "URL copied";
+        toast.style.position = "fixed";
+        toast.style.top = "16px";
+        toast.style.right = "16px";
+        toast.style.zIndex = "2147483647";
+        toast.style.padding = "10px 14px";
+        toast.style.borderRadius = "8px";
+        toast.style.background = "rgba(17, 24, 39, 0.95)";
+        toast.style.color = "#ffffff";
+        toast.style.fontFamily =
+          "system-ui, -apple-system, Segoe UI, sans-serif";
+        toast.style.fontSize = "13px";
+        toast.style.boxShadow = "0 8px 20px rgba(0, 0, 0, 0.25)";
+        toast.style.opacity = "0";
+        toast.style.transition = "opacity 120ms ease";
+
+        document.body.appendChild(toast);
+        requestAnimationFrame(() => {
+          toast.style.opacity = "1";
+        });
+
+        setTimeout(() => {
+          toast.style.opacity = "0";
+          setTimeout(() => toast.remove(), 150);
+        }, 1200);
       },
-      args: [cleanedURL],
+      args: [{ url: cleanedURL, showToast: Boolean(options?.showToast) }],
     });
     console.log("Current tab URL copied to clipboard");
   } catch (err) {
