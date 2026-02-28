@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/TylerHillery/url-clipr/compare/v1.0.2...v1.1.0) (2026-02-28)
+
+
+### Features
+
+* add toast notification for URL copy confirmation ([#1](https://github.com/TylerHillery/url-clipr/issues/1)) ([eafd7e8](https://github.com/TylerHillery/url-clipr/commit/eafd7e8a74555723a13868947ac6ae5ae672c319))
+
 ## [1.0.2](https://github.com/TylerHillery/url-clipr/compare/v1.0.1...v1.0.2) (2026-01-03)
 
 
